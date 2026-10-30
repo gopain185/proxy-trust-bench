@@ -29,7 +29,7 @@ def build_dataset(public: bool) -> Path:
     (out / "dataset-metadata.json").write_text(json.dumps({
         "title": "Proxy Selection Simulations",
         "id": DATASET_ID,
-        "subtitle": "Choosing an offline score by its correlation with a few LB points, 180,000 seasons",
+        "subtitle": "Picking an offline score by its LB correlation: 180,000 simulated seasons",
         "description": datasheet,
         "isPrivate": not public,
         "licenses": [{"name": "CC0-1.0"}],
@@ -71,7 +71,7 @@ HIT = """r7[r7.scenario != "equal"].pivot_table(index=["scenario", "c", "design"
 OPT = """r7[r7.design == "random"].pivot_table(index=["scenario", "c"], columns="n1", values=["rho1_sel", "rho_true_sel"]).round(2)
 """
 
-COLLAPSE = """print("phase-2 Spearman of the selected proxy, over the whole grid:", summary.rho2_sel.min().round(2), "to", summary.rho2_sel.max().round(2))
+COLLAPSE = """print("phase-2 Spearman of the selected proxy, over the whole grid:", round(float(summary.rho2_sel.min()), 2), "to", round(float(summary.rho2_sel.max()), 2))
 x = df[(df.scenario == "close") & (df.c == 0.8) & (df.r == 0.7) & (df.n1 == 10) & (df.design == "top")]
 print("close proxies, c = 0.8, r = 0.7, 10 top submissions: median phase-2 Spearman", round(x.rho2_sel.median(), 2),
       "| share at or below 0.1:", round((x.rho2_sel <= 0.1).mean(), 2))
